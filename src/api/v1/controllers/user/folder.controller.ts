@@ -26,10 +26,10 @@ const FolderController = {
                 };
                 const findFolder = await FolderService.getFolder({name:queryObj.name});
                 if(findFolder){
-                    throw new AppError(403, 'Folder already Exists!');
+                    throw new AppError(403, 'Bucket already Exists!');
                 }
                 const folder = await FolderService.createFolder(queryObj);
-                Handler.SendResponse(res, 200, 'Folder Created Successfully!', folder);
+                Handler.SendResponse(res, 200, 'Bucket Created Successfully!', folder);
             } catch (error) {
                 console.log("User Create Folder Error ::>>",error);
                 next(error);
@@ -45,7 +45,7 @@ const FolderController = {
             if(!folder){
                 throw new AppError(403, `Folder Doesn't Exists with this id ${req.body.folderId}!`);
             }
-            Handler.SendResponse(res, 200, 'Folder fetched Successfully!', folder);
+            Handler.SendResponse(res, 200, 'Bucket fetched Successfully!', folder);
         } catch (error) {
             console.log("Get folders Error ::>>", error);
             next(error);
@@ -59,7 +59,7 @@ const FolderController = {
             const tuser = (req as any).user;
             const findFolder = await FolderService.getFolder({userId:tuser.userId, folderId:req.body.folderId});
             if(!findFolder){
-                throw new AppError(403, `Folder Doesn't Exists with this id ${req.body.folderId}!`);
+                throw new AppError(403, `Bucket Doesn't Exists with this id ${req.body.folderId}!`);
             }
             // const childFolders: any[] = Array.isArray(findFolder.childFolder)
             //                             ? findFolder.childFolder
@@ -77,7 +77,7 @@ const FolderController = {
                 await FileService.deleteFile({_id:file._id, userId:tuser.userId}, `${file.path}/${file.name}`);
             }
             const folder = await FolderService.deleteFolder({folderId:req.body.folderId}, `${findFolder.path}/${findFolder.name}`, findFolder.parentFolder);
-            Handler.SendResponse(res, 200, 'Folder Deleted Successfully!', "folder");
+            Handler.SendResponse(res, 200, 'Bucket Deleted Successfully!', "folder");
         } catch (error) {
             console.log("Delete folder Error ::>>", error);
             next(error);
@@ -94,7 +94,7 @@ const FolderController = {
                 ...rest
             };            
             const folders = await FolderService.getAllFolder(queryObj);
-            Handler.SendResponse(res, 200, 'Folders fetched Successfully!', folders);
+            Handler.SendResponse(res, 200, 'Buckets fetched Successfully!', folders);
         } catch (error) {
             console.log("Get All folders Error ::>>", error);
             next(error);
@@ -107,7 +107,7 @@ const FolderController = {
                 userId:tuser.userId, 
             };            
             const folders = await FolderService.getAllFolder(queryObj);
-            Handler.SendResponse(res, 200, 'Folders fetched Successfully!', folders);
+            Handler.SendResponse(res, 200, 'Buckets fetched Successfully!', folders);
         } catch (error) {
             console.log("All folders Error ::>>", error);
             next(error);
@@ -123,7 +123,7 @@ const FolderController = {
             }
             console.log("QuerObj ::>>>",queryObj);
             const folders = await FolderService.getFolderStats(queryObj);
-            Handler.SendResponse(res, 200, 'Folders stats fetched Successfully!', folders);
+            Handler.SendResponse(res, 200, 'Bucket stats fetched Successfully!', folders);
         } catch (error) {
             console.log("Get User Folder Stats Error ::>>",error);
             next(error);
