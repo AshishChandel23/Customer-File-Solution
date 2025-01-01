@@ -32,6 +32,9 @@ const AuthController = {
                 return next(new AppError(403, error.message));
             }
             const user = await AuthSerivce.findUser({email:email, forLabel:'login'});
+            if(user.verified==='No'){
+                return next(new AppError(403, `User's not verified yet!`));
+            }
             const hasPasswordMatched = bcrypt.compareSync(password, user.password.toString());
             if(!hasPasswordMatched){
                 return next(new AppError(403, 'Invalid Credentials!'));
